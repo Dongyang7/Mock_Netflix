@@ -10,13 +10,13 @@ class Item extends Component {
         let showme = this.props.showme;
         return (
             <div className="col-xs-2">
-                <div className="panel panel-default" onMouseOver={()=>this.setState({showme: true})}>
+                <div className="panel panel-default" onMouseLeave={()=>this.setState({showme: false})} onMouseOver={()=>this.setState({showme: true})}>
                     <div className="panel-heading">{this.props.detail.title}</div>
-                    <div className="panel-body">
-                        <img src={this.props.detail.img} />
+                    <div className="panel-body" className="row">
+                        <img className="col-xs-12" src={this.props.detail.img} />
                     </div>
                     <div className="panel-footer">
-                        {this.state.showme && <button type="button" onClick={()=>this.props.onRemove(this.props.detail)} className="btn btn-default">Remove</button>}
+                        {this.state.showme && <button type="button" onClick={()=>this.props.onRemove(this.props.detail)} className="btn btn-default">{this.props.action}</button>}
                     </div>
                 </div>
             </div>

@@ -1,91 +1,57 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
+import {getMovies, deleteFn, addFn} from '../actions/movies.js';
 import Item from './Item.js';
-import Recommendation from './Recommendation.js';
 import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
-  state = {
-      mylist : [
-        {
-          'title': 'Futurama',
-          'id': 1,
-          'img': 'http://cdn1.nflximg.net/webp/7621/3787621.webp'
-        },
-        {
-          'title': 'The Interview',
-          'id': 2,
-          'img': 'http://cdn1.nflximg.net/webp/1381/11971381.webp'
-        },
-        {
-          'title': 'Gilmore Girls',
-          'id': 3,
-          'img': 'http://cdn1.nflximg.net/webp/7451/11317451.webp'
-        }
-      ],
-      recommendations : [
-        {
-          'title': 'Family Guy',
-          'id': 4,
-          'img': 'http://cdn5.nflximg.net/webp/5815/2515815.webp'
-        },
-        {
-          'title': 'The Croods',
-          'id': 5,
-          'img': 'http://cdn3.nflximg.net/webp/2353/3862353.webp'
-        },
-        {
-          'title': 'Friends',
-          'id': 6,
-          'img': 'http://cdn0.nflximg.net/webp/3200/9163200.webp'
-        }
-      ]
+  componentDidMount() {
+    // if (this.props.mylist.length == 0 && this.props.recommendations.length == 0){
+    if (this.props.mylist.length == 0 && this.props.recommendations.length == 0){
+      this.props.dispatch(getMovies());
+    }
   }
   removeFromList = (movie) => {
-    this.setState((state)=>{
-      return {
-        mylist: state.mylist.filter((item, index)=>{
-          if (item.id!=movie.id) {
-            return true;
-          }
-        })
-      }
-    })
+    this.props.dispatch(deleteFn(movie))
   }
   addToListFn = (movie) => {
-    this.setState((state)=>{
-      return {
-        recommendations: state.recommendations.filter((item, index)=>{
-          if (item.id!=movie.id) {
-            return true;
-          }
-        }),
-        mylist: state.mylist.concat(movie)
-      }
-    })
+    this.props.dispatch(addFn(movie))
   }
+
   render() {
-    var list = [];
-    for (var i = 0; i < this.state.mylist.length; i++) {
-      list.push(<Item detail={this.state.mylist[i]} onRemove = {this.removeFromList} />)
-    }
-    var recommend = [];
-    for (var i = 0; i < this.state.recommendations.length; i++) {
-      recommend.push(<Recommendation detail={this.state.recommendations[i]} addToList={this.addToListFn} />)
-    }
-    return (
-      <div className="App">
-        <div className="row" className="panel panel-default">
-          <div className="panel-heading">My List</div>
-          <div className="panel-body">{list}</div>
+    if (this.props.mylist && this.props.recommendations) {
+      var list = [];
+      for (var i = 0; i < this.props.mylist.length; i++) {
+        list.push(<Item action={'Remove'} detail={this.props.mylist[i]} onRemove={this.removeFromList} />)
+      }
+      var recommend = [];
+      for (var i = 0; i < this.props.recommendations.length; i++) {
+        recommend.push(<Item action={'Add'} detail={this.props.recommendations[i]} onRemove={this.addToListFn} />)
+      }
+      return (
+        <div className="App">
+          <div><h1>Mock Netflix</h1></div>
+          <div className="row" className="panel panel-default">
+            <div className="panel-heading">My List</div>
+            <div className="panel-body">{list}</div>
+          </div>
+          <div className="row" className="panel panel-default">
+            <div className="panel-heading">Recommendations</div>
+            <div className="panel-body">{recommend}</div>
+          </div>
         </div>
-        <div className="row" className="panel panel-default">
-          <div className="panel-heading">Recommendations</div>
-          <div className="panel-body">{recommend}</div>
-        </div>
-      </div>
-    );
+      );
+    }
+    return <p>Loading...</p>
   }
 }
 
-export default App;
+function mapStateToProps({mylist, recommendations}) {
+    return {
+        mylist,
+        recommendations
+    };
+}
+
+export default connect(mapStateToProps)(App);
