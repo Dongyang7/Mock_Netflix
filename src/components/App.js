@@ -20,7 +20,6 @@ class App extends Component {
   }
 
   render() {
-    if (this.props.mylist && this.props.recommendations) {
       var list = [];
       for (var i = 0; i < this.props.mylist.length; i++) {
         list.push(<Item action={'Remove'} detail={this.props.mylist[i]} onRemove={this.removeFromList} />)
@@ -31,19 +30,23 @@ class App extends Component {
       }
       return (
         <div className="App">
-          <div><h1>Mock Netflix</h1></div>
-          <div className="row" className="panel panel-default">
-            <div className="panel-heading">My List</div>
-            <div className="panel-body">{list}</div>
+          <div className="navbar navbar-inverse">
+                  <div className="container-fluid">
+                      <div className="navbar-header">
+                      <a className="navbar-brand" href="#">Netflix</a>
+                      </div>
+                  </div>
           </div>
-          <div className="row" className="panel panel-default">
-            <div className="panel-heading">Recommendations</div>
-            <div className="panel-body">{recommend}</div>
-          </div>
+            <div className="row" style={{backgroundColor: "#222"}} className="panel panel-custom panel-default">
+              <div className="panel-heading" style={{backgroundColor: "#222", color: "white"}}>My List</div>
+              <div className="panel-body">{list}</div>
+            </div>
+            <div className="row" style={{backgroundColor: "#222"}} className="panel panel-default">
+              <div className="panel-heading" style={{backgroundColor: "#222", color: "white"}}>Recommendations</div>
+              <div className="panel-body">{recommend}</div>
+            </div>
         </div>
       );
-    }
-    return <p>Loading...</p>
   }
 }
 

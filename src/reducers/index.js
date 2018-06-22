@@ -28,9 +28,11 @@ var appReducer = (state = initialAppState, action) => {
                 }
                 return true;
             });
+            var newrecommendations = state.recommendations;
+            newrecommendations.push(action.movie);
             return {
                 mylist: newlist,
-                recommendations: state.recommendations
+                recommendations: newrecommendations
             }
         break;
         case FETCH_MOVIES:
